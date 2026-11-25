@@ -22,6 +22,7 @@
 
     <modules>
         <module>system-pulse-lib</module>
+        <module>system-pulse-core</module>
         <module>target-server</module>
     </modules>
 

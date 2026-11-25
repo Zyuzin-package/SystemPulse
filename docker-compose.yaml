@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: systempulse
+      POSTGRES_USER: systempulse
+      POSTGRES_PASSWORD: systempulse
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U systempulse -d systempulse"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  system-pulse-core:
+    build:
+      context: .
+      dockerfile: system-pulse-core/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/systempulse
+      SPRING_DATASOURCE_USERNAME: systempulse
+      SPRING_DATASOURCE_PASSWORD: systempulse
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  target-server:
+    build:
+      context: .
+      dockerfile: target-server/Dockerfile
+    depends_on:
+      system-pulse-core:
+        condition: service_started
+    ports:
+      - "8081:8080"
+
+volumes:
+  postgres-data:
