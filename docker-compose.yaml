@@ -27,10 +27,10 @@ services:
     ports:
       - "8080:8080"
 
-  target-server:
+  target-service:
     build:
       context: .
-      dockerfile: target-server/Dockerfile
+      dockerfile: target-service/Dockerfile
     depends_on:
       system-pulse-core:
         condition: service_started
