@@ -10,7 +10,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>target-server</artifactId>
+    <artifactId>target-service</artifactId>
 
     <dependencies>
         <dependency>
