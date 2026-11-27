@@ -2,12 +2,7 @@ FROM maven:3.9-eclipse-temurin-26 AS build
 
 WORKDIR /workspace
 
-COPY pom.xml .
-COPY system-pulse-lib/pom.xml system-pulse-lib/pom.xml
-COPY system-pulse-core/pom.xml system-pulse-core/pom.xml
-COPY target-service/pom.xml target-service/pom.xml
-COPY system-pulse-lib/src system-pulse-lib/src
-COPY target-service/src target-service/src
+COPY . .
 
 RUN mvn -pl target-service -am package -DskipTests
 

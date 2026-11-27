@@ -12,6 +12,8 @@ services:
       retries: 10
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
 
   system-pulse-core:
     build:
@@ -21,16 +23,24 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/systempulse
       SPRING_DATASOURCE_USERNAME: systempulse
       SPRING_DATASOURCE_PASSWORD: systempulse
+      JAVA_TOOL_OPTIONS: >-
+        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     depends_on:
       postgres:
         condition: service_healthy
     ports:
       - "8080:8080"
+      - "5005:5005"
 
   target-service:
     build:
       context: .
       dockerfile: target-service/Dockerfile
+    environment:
+      SYSTEM_PULSE_URL: http://system-pulse-core:8080
+      SYSTEM_PULSE_SERVICE_NAME: target-service
+      SYSTEM_PULSE_ENVIRONMENT: docker
+      SYSTEM_PULSE_VERSION: 1.0-SNAPSHOT
     depends_on:
       system-pulse-core:
         condition: service_started

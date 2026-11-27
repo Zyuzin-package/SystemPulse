@@ -1,0 +1,59 @@
+openapi: 3.0.3
+info:
+  title: SystemPulse API
+  version: 1.0.0
+paths:
+  /api/system-pulse/logs:
+    post:
+      operationId: receiveRawLogEvent
+      tags:
+        - LogEvents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawLogEvent'
+      responses:
+        '202':
+          description: Событие принято для обработки
+components:
+  schemas:
+    RawLogEvent:
+      type: object
+      required:
+        - eventId
+        - occurredAt
+        - level
+        - serviceName
+        - environment
+        - serviceVersion
+        - logger
+        - message
+      properties:
+        eventId:
+          type: string
+          format: uuid
+        occurredAt:
+          type: string
+          format: date-time
+        level:
+          type: string
+        serviceName:
+          type: string
+        environment:
+          type: string
+        serviceVersion:
+          type: string
+        logger:
+          type: string
+        message:
+          type: string
+        exceptionClass:
+          type: string
+        stackTrace:
+          type: string
+        traceId:
+          type: string
+        errorCode:
+          type: string
